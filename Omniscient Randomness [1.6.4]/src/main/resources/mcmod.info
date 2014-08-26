@@ -1,0 +1,16 @@
+[
+{
+  "modid": "OmniRandom",
+  "name": "Omniscient Randomness",
+  "description": "All the random stuff!",
+  "version": "v0.1",
+  "mcversion": "1.6.4",
+  "url": "",
+  "updateUrl": "",
+  "authors": ["AsianJose"],
+  "credits": "Forge guys, me, and people that contributed ideas!",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

@@ -1,0 +1,16 @@
+#Note: to use the section symbol (§ [Alt + 21]),
+#you must find a way to change the encoding of
+#this file to "UTF-8 without BOM" (I use Notepad++)
+
+#Items
+item.omnirandom:coreOfSteve.name=§bCore of Steve
+
+#Blocks [tiles?]
+tile.omnirandom:fridge.name=Refrigerator
+tile.omnirandom:indComposter.name=Industrial Composter
+tile.omnirandom:xpDecomposer.name=XP Decomposer
+
+#GUIs [containers]
+container.fridge=Refrigerator
+container.indComposter=Industrial Composter
+container.xpDecomposer=XP Decomposer
