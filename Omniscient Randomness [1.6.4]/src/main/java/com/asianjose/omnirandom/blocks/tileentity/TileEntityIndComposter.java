@@ -11,12 +11,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityIndComposter extends TileEntity implements ISidedInventory{
+public class TileEntityIndComposter extends TileEntityOmni {
 
 	// Initialize variables. Yayyyyy~~~~~
+	public static final int INVENTORY_SIZE = 2;
 	public static final int[] slots_top = new int[]{0, 1};
 	
-	private ItemStack[] slots = new ItemStack[2];
+	
 	
 	private String localizedName;
 	
@@ -26,76 +27,24 @@ public class TileEntityIndComposter extends TileEntity implements ISidedInventor
 	public int maxCompostProgress = 200;
 	//////////////////////////////////////////////////////////// End Initialization o3o
 	
+	public TileEntityIndComposter() {
+		inventory = new ItemStack[INVENTORY_SIZE];
+	}
+	
 	//////////////////////////////////////////// Buncha random (necessary) functions
 	public String getInvName(){
 		return this.isInvNameLocalized() ? this.localizedName : "container.indComposter";
-	}
-	
-	public boolean isInvNameLocalized() {	
-		return this.localizedName != null && this.localizedName.length() > 0;
 	}
 	
 	public void setGuiDisplayName(String displayName){
 		this.localizedName = displayName;
 	}
 
+	@Override
 	public int getSizeInventory(){
 		return 2;
 	}
 
-	public ItemStack getStackInSlot(int i) {
-		return this.slots[i];
-	}
-
-	public ItemStack decrStackSize(int i, int j) {
-		if(this.slots[i] != null){
-			ItemStack itemstack;
-			
-			if(this.slots[i].stackSize <= j){
-				itemstack = this.slots[i];
-				
-				this.slots[i] = null;
-				return itemstack;
-			}else{
-				itemstack = this.slots[i].splitStack(j);
-				
-				if(this.slots[i].stackSize == 0){
-					this.slots[i] = null;
-				}
-				
-				return itemstack;
-			}
-		}
-		return null;
-	}
-
-	public ItemStack getStackInSlotOnClosing(int i) {
-		if(this.slots[i] != null){
-			ItemStack itemstack = this.slots[i];
-			this.slots[i] = null;
-			
-			return itemstack;
-		}
-		return null;
-	}
-
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		this.slots[i] = itemstack;
-		
-		if(itemstack != null && itemstack.stackSize > this.getInventoryStackLimit()){
-			itemstack.stackSize = this.getInventoryStackLimit();
-		}
-	}
-
-	public int getInventoryStackLimit() {
-		return 64;
-	}
-
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : entityplayer.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
-	}
-	
-	
 	public int[] getAccessibleSlotsFromSide(int var1) {
 		return slots_top;
 	}
@@ -113,14 +62,14 @@ public class TileEntityIndComposter extends TileEntity implements ISidedInventor
 		super.readFromNBT(nbt);
 		
 		NBTTagList list = nbt.getTagList("Items");
-		this.slots = new ItemStack[this.getSizeInventory()];
+		this.inventory = new ItemStack[this.getSizeInventory()];
 		
 		for(int i = 0; i < list.tagCount(); i++){
 			NBTTagCompound compound = (NBTTagCompound) list.tagAt(i);
 			byte b = compound.getByte("Slot");
 			
-			if(b >= 0 && b < this.slots.length){
-				this.slots[b] = ItemStack.loadItemStackFromNBT(compound);
+			if(b >= 0 && b < this.inventory.length){
+				this.inventory[b] = ItemStack.loadItemStackFromNBT(compound);
 			}
 		}
 		
@@ -137,11 +86,11 @@ public class TileEntityIndComposter extends TileEntity implements ISidedInventor
 		nbt.setShort("compostProgress", (short)this.compostProgress);
 		NBTTagList list = new NBTTagList();
 		
-		for(int i = 0; i < this.slots.length; i++){
-			if(this.slots[i] != null){
+		for(int i = 0; i < this.inventory.length; i++){
+			if(this.inventory[i] != null){
 				NBTTagCompound compound = new NBTTagCompound();
 				compound.setByte("Slot", (byte)i);
-				this.slots[i].writeToNBT(compound);
+				this.inventory[i].writeToNBT(compound);
 				list.appendTag(compound);
 			}
 		}
@@ -151,6 +100,11 @@ public class TileEntityIndComposter extends TileEntity implements ISidedInventor
 		if(this.isInvNameLocalized()){
 			nbt.setString("Custom Name", this.localizedName);
 		}
+	}
+	
+	@Override
+	public boolean canUpdate() {
+		return true;
 	}
 	
 	public void updateEntity(){		//Updates the entity (20 ticks -> 1 second)
@@ -198,15 +152,15 @@ public class TileEntityIndComposter extends TileEntity implements ISidedInventor
 	}
 	
 	public boolean canCompost(){	//True if the tile entity is able to compost the input
-		if(this.slots[0] == null){
+		if(this.inventory[0] == null){
 			return false;
 		}else{
-			ItemStack resultItem = getCompostResults(this.slots[0]);
+			ItemStack resultItem = getCompostResults(this.inventory[0]);
 			
 			if(resultItem == null) return false;
-			if(this.slots[1] == null) return true;
-			if(!this.slots[1].isItemEqual(resultItem)) return false;
-			int result = slots[1].stackSize + resultItem.stackSize;
+			if(this.inventory[1] == null) return true;
+			if(!this.inventory[1].isItemEqual(resultItem)) return false;
+			int result = inventory[1].stackSize + resultItem.stackSize;
             return (result <= getInventoryStackLimit() && result <= resultItem.getMaxStackSize());
 		}
 		
@@ -214,23 +168,23 @@ public class TileEntityIndComposter extends TileEntity implements ISidedInventor
 	
 	public void compost(){	//Compost the item in input if compostable
 		if(canCompost()){
-			ItemStack inputItem = this.slots[0];
-			ItemStack resultItem = getCompostResults(this.slots[0]); 
+			ItemStack inputItem = this.inventory[0];
+			ItemStack resultItem = getCompostResults(this.inventory[0]); 
 			
-			if(this.slots[1] == null){
-				this.slots[1] = resultItem.copy();
-			}else if(this.slots[1].isItemEqual(resultItem)){
-				this.slots[1].stackSize += resultItem.stackSize;
+			if(this.inventory[1] == null){
+				this.inventory[1] = resultItem.copy();
+			}else if(this.inventory[1].isItemEqual(resultItem)){
+				this.inventory[1].stackSize += resultItem.stackSize;
 			}
 			
 			if(inputItem.itemID == Block.sapling.blockID){
-				this.slots[0].stackSize -= 4;
+				this.inventory[0].stackSize -= 4;
 			}else{
-				this.slots[0].stackSize -= resultItem.stackSize;
+				this.inventory[0].stackSize -= resultItem.stackSize;
 			}
 				
-				if(this.slots[0].stackSize <= 0){
-					this.slots[0] = this.slots[0].getItem().getContainerItemStack(this.slots[0]);
+				if(this.inventory[0].stackSize <= 0){
+					this.inventory[0] = this.inventory[0].getItem().getContainerItemStack(this.inventory[0]);
 				}
 			}
 		}

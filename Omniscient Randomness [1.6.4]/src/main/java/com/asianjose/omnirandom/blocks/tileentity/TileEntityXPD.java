@@ -11,13 +11,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityXPD extends TileEntity implements ISidedInventory{
+public class TileEntityXPD extends TileEntityOmni {
 
 	// Initialize variables. Yayyyyy~~~~~
 	public static final int[] slots_top = new int[]{0};
 	public static final int[] notPoweredSlots = new int[0];
 	
-	private ItemStack[] slots = new ItemStack[1];
+	public static final int INVENTORY_SIZE = 1;
 	
 	private String localizedName;
 	
@@ -27,76 +27,19 @@ public class TileEntityXPD extends TileEntity implements ISidedInventory{
 	public int maxDecomposeTime = 200;
 	//////////////////////////////////////////////////////////// End Initialization o3o
 	
+	public TileEntityXPD() {
+		inventory = new ItemStack[INVENTORY_SIZE];
+	}
+	
 	//////////////////////////////////////////// Buncha random (necessary) functions
 	public String getInvName(){
 		return this.isInvNameLocalized() ? this.localizedName : "container.xpDecomposer";
-	}
-	
-	public boolean isInvNameLocalized() {	
-		return this.localizedName != null && this.localizedName.length() > 0;
 	}
 	
 	public void setGuiDisplayName(String displayName){
 		this.localizedName = displayName;
 	}
 
-	public int getSizeInventory(){
-		return 1;
-	}
-
-	public ItemStack getStackInSlot(int i) {
-		return this.slots[i];
-	}
-
-	public ItemStack decrStackSize(int i, int j) {
-		if(this.slots[i] != null){
-			ItemStack itemstack;
-			
-			if(this.slots[i].stackSize <= j){
-				itemstack = this.slots[i];
-				
-				this.slots[i] = null;
-				return itemstack;
-			}else{
-				itemstack = this.slots[i].splitStack(j);
-				
-				if(this.slots[i].stackSize == 0){
-					this.slots[i] = null;
-				}
-				
-				return itemstack;
-			}
-		}
-		return null;
-	}
-
-	public ItemStack getStackInSlotOnClosing(int i) {
-		if(this.slots[i] != null){
-			ItemStack itemstack = this.slots[i];
-			this.slots[i] = null;
-			
-			return itemstack;
-		}
-		return null;
-	}
-
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		this.slots[i] = itemstack;
-		
-		if(itemstack != null && itemstack.stackSize > this.getInventoryStackLimit()){
-			itemstack.stackSize = this.getInventoryStackLimit();
-		}
-	}
-
-	public int getInventoryStackLimit() {
-		return 64;
-	}
-
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : entityplayer.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
-	}
-	
-	
 	public int[] getAccessibleSlotsFromSide(int var1) {
 		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord) ? slots_top : notPoweredSlots;
 	}
@@ -114,14 +57,14 @@ public class TileEntityXPD extends TileEntity implements ISidedInventory{
 		super.readFromNBT(nbt);
 		
 		NBTTagList list = nbt.getTagList("Items");
-		this.slots = new ItemStack[this.getSizeInventory()];
+		this.inventory = new ItemStack[this.getSizeInventory()];
 		
 		for(int i = 0; i < list.tagCount(); i++){
 			NBTTagCompound compound = (NBTTagCompound) list.tagAt(i);
 			byte b = compound.getByte("Slot");
 			
-			if(b >= 0 && b < this.slots.length){
-				this.slots[b] = ItemStack.loadItemStackFromNBT(compound);
+			if(b >= 0 && b < this.inventory.length){
+				this.inventory[b] = ItemStack.loadItemStackFromNBT(compound);
 			}
 		}
 		
@@ -138,11 +81,11 @@ public class TileEntityXPD extends TileEntity implements ISidedInventory{
 		nbt.setShort("DecomposeTime", (short)this.decomposeTime);
 		NBTTagList list = new NBTTagList();
 		
-		for(int i = 0; i < this.slots.length; i++){
-			if(this.slots[i] != null){
+		for(int i = 0; i < this.inventory.length; i++){
+			if(this.inventory[i] != null){
 				NBTTagCompound compound = new NBTTagCompound();
 				compound.setByte("Slot", (byte)i);
-				this.slots[i].writeToNBT(compound);
+				this.inventory[i].writeToNBT(compound);
 				list.appendTag(compound);
 			}
 		}
@@ -154,8 +97,12 @@ public class TileEntityXPD extends TileEntity implements ISidedInventory{
 		}
 	}
 	
+	@Override
+	public boolean canUpdate() {
+		return true;
+	}
+	
 	public void updateEntity(){
-
 		if(!worldObj.isRemote){
 			if(this.isDecomposing()){
 				--this.decomposeTime;
@@ -168,12 +115,12 @@ public class TileEntityXPD extends TileEntity implements ISidedInventory{
 				}
 			}
 			
-			if(this.decomposeTime <= 0 && isItemFuel(this.slots[0])){ //Checks slot to start decomposing
-				this.decomposeTime = this.maxDecomposeTime;
-				--this.slots[0].stackSize;
+			if(this.decomposeTime <= 0 && isItemFuel(this.inventory[0])){ //Checks slot to start decomposing
+				this.decomposeTime = getDecomposeXpAmount(this.inventory[0]);
+				--this.inventory[0].stackSize;
 				
-				if(this.slots[0].stackSize == 0){
-					this.slots[0] = this.slots[0].getItem().getContainerItemStack(this.slots[0]);
+				if(this.inventory[0].stackSize == 0){
+					this.inventory[0] = this.inventory[0].getItem().getContainerItemStack(this.inventory[0]);
 				}
 			}
 		}
@@ -198,7 +145,7 @@ public class TileEntityXPD extends TileEntity implements ISidedInventory{
 	}
 	
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {	//True if... it's valid
-		return i == 0 ? isItemFuel(itemstack) : (i > 0 ? this.slots[i].getItemDamage() > 0 : false);
+		return i == 0 ? isItemFuel(itemstack) : (i > 0 ? this.inventory[i].getItemDamage() > 0 : false);
 	}
 	
 	public int getCoolTimeRemainingScaled(int i){	//For Gui thingy. 

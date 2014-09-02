@@ -2,8 +2,15 @@
 #you must find a way to change the encoding of
 #this file to "UTF-8 without BOM" (I use Notepad++)
 
+# §0 (Black) §1 (d.Blue) §2 (d.Green) §3 (d.Aqua) §4 (d.Red) §5 (d.Purple)
+# §6 (Gold) §7 (Gray) §8 (d.Gray) §9 (Blue) §a (Green) §b (Aqua) §c (Red)
+# §d (lite Purple) §e (Yellow) §f (White)
+# §k (Obfuscated) §l (BOLD) §m (strike) §n (underline) §o (Italic) §r (Reset)
+
 #Items
 item.omnirandom:coreOfSteve.name=§bCore of Steve
+item.omnirandom:indPotato.name=Industrial Potato
+item.omnirandom:seekerPickaxe.name=§cSeeker Pickaxe
 
 #Blocks [tiles?]
 tile.omnirandom:fridge.name=Refrigerator

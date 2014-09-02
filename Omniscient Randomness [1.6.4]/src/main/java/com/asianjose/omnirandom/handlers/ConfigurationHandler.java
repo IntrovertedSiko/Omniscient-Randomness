@@ -22,9 +22,11 @@ public class ConfigurationHandler {
 	
 	private static void loadConfiguration()
 	{
-		OmniscientRandomness.fridgeId = configuration.getBlock("fridge Id", 2000).getInt();
+		/*OmniscientRandomness.fridgeId = configuration.getBlock("fridge Id", 2000).getInt();
 		OmniscientRandomness.xpDecomposerId = configuration.getBlock("XpDecomposer Id", 2001).getInt();
 		OmniscientRandomness.indComposterId = configuration.getBlock("industriousComposter Id", 2002).getInt();
+		*/
+		OmniscientRandomness.blockIdStart = configuration.getBlock("Block ID Start", 2000, "default 2000").getInt();
 		OmniscientRandomness.itemIdStart = configuration.getItem("Item ID Start", 1000, "default 1000").getInt();
 		
 		if(configuration.hasChanged())

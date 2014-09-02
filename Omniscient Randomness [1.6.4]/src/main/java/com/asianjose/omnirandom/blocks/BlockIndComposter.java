@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.asianjose.omnirandom.OmniscientRandomness;
 import com.asianjose.omnirandom.blocks.tileentity.TileEntityIndComposter;
+import com.asianjose.omnirandom.init.ModBlocks;
 
 import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -38,7 +39,7 @@ public class BlockIndComposter extends BlockOmniContainer{
 
 
 	public int idDropped(int par1, Random rand, int par3){
-		return OmniscientRandomness.indComposter.blockID;
+		return ModBlocks.indComposter.blockID;
 	}
 	
 	public int quantityDropped(Random rand){
@@ -46,7 +47,7 @@ public class BlockIndComposter extends BlockOmniContainer{
 	}
 	
 	public int idPicked(World world, int x, int y, int z){
-		return OmniscientRandomness.indComposter.blockID;
+		return ModBlocks.indComposter.blockID;
 	}
 	
 	@SideOnly(Side.CLIENT)

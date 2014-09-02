@@ -5,15 +5,18 @@ import org.lwjgl.opengl.GL11;
 import com.asianjose.omnirandom.blocks.container.ContainerIndComposter;
 import com.asianjose.omnirandom.blocks.tileentity.TileEntityIndComposter;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
+@SideOnly(Side.CLIENT)
 public class GuiIndComposter extends GuiContainer{
 
-	 public static ResourceLocation texture = new ResourceLocation("omnirandom", "textures/blocks/indcGui.png");     
+	 public static ResourceLocation texture = new ResourceLocation("omnirandom", "textures/gui/indcGui.png");     
      
      public TileEntityIndComposter indComposter;
     
@@ -44,8 +47,8 @@ public class GuiIndComposter extends GuiContainer{
              {
                      int k = this.indComposter.getcompostProgressRemainingScaled(33);
                      this.drawTexturedModalRect(guiLeft + 71, guiTop + 16, 176, 0, k, 34);
-             }else{
-            	 this.drawTexturedModalRect(guiLeft + 71, guiTop + 16, 176, 0, 0, 34);
+          //   }else{
+            //	 this.drawTexturedModalRect(guiLeft + 71, guiTop + 16, 176, 0, 0, 34);
              }
             
      }

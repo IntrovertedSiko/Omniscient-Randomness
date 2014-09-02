@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.asianjose.omnirandom.OmniscientRandomness;
 import com.asianjose.omnirandom.blocks.tileentity.TileEntityFridge;
+import com.asianjose.omnirandom.init.ModBlocks;
 
 import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -35,9 +36,9 @@ public class BlockFridge extends BlockOmniContainer{
 	public BlockFridge(int id, Material material) {
 		super(id, material);
 	}
-
+/*
 	public int idDropped(int par1, Random rand, int par3){
-		return OmniscientRandomness.fridge.blockID;
+		return ModBlocks.fridge.blockID;
 	}
 	
 	public int quantityDropped(Random rand){
@@ -45,9 +46,9 @@ public class BlockFridge extends BlockOmniContainer{
 	}
 	
 	public int idPicked(World world, int x, int y, int z){
-		return OmniscientRandomness.fridge.blockID;
+		return ModBlocks.fridge.blockID;
 	}
-	
+	*/
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister reg){
 		this.iconFront = reg.registerIcon("omnirandom:fridgeFront");

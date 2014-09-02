@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.asianjose.omnirandom.OmniscientRandomness;
 import com.asianjose.omnirandom.blocks.tileentity.TileEntityXPD;
+import com.asianjose.omnirandom.init.ModBlocks;
 
 import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -38,7 +39,7 @@ public class BlockXPD extends BlockOmniContainer{
 
 
 	public int idDropped(int par1, Random rand, int par3){
-		return OmniscientRandomness.xpDecomposer.blockID;
+		return ModBlocks.xpDecomposer.blockID;
 	}
 	
 	public int quantityDropped(Random rand){
@@ -46,7 +47,7 @@ public class BlockXPD extends BlockOmniContainer{
 	}
 	
 	public int idPicked(World world, int x, int y, int z){
-		return OmniscientRandomness.xpDecomposer.blockID;
+		return ModBlocks.xpDecomposer.blockID;
 	}
 	
 	@SideOnly(Side.CLIENT)

@@ -1,7 +1,10 @@
 package com.asianjose.omnirandom.blocks;
 
+import java.util.Random;
+
 import com.asianjose.omnirandom.OmniscientRandomness;
 import com.asianjose.omnirandom.Reference;
+import com.asianjose.omnirandom.init.ModBlocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -15,10 +18,28 @@ import net.minecraft.world.World;
 
 public class BlockOmniContainer extends BlockContainer {
 
+	//Sets generic values (IE the hardness/material)
 	public BlockOmniContainer(int id, Material par2Material) {
 		super(id, Material.rock);
+		this.setHardness(1F);
+		this.setResistance(1F);
+		this.setStepSound(Block.soundStoneFootstep);
 		this.setCreativeTab(OmniscientRandomness.OMNI_TAB);
 	}
+	
+	public int idDropped(int par1, Random rand, int par3){
+		return this.blockID;
+	}
+	
+	public int quantityDropped(Random rand){
+		return 1;
+	}
+	
+	public int idPicked(World world, int x, int y, int z){
+		return this.blockID;
+	}
+	
+	
 	/** Common methods for CONTAINER BLOCKS (IE face the player) **/
 	public void onBlockAdded(World world, int x, int y, int z){
 		super.onBlockAdded(world, x, y, z);
@@ -60,7 +81,7 @@ public class BlockOmniContainer extends BlockContainer {
 		return unlocalizedName.substring(unlocalizedName.indexOf(".") + 1);
 	}
 	
-	/*
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister) // 1.7: IconRegister -> IIconRegister
@@ -68,7 +89,7 @@ public class BlockOmniContainer extends BlockContainer {
 		blockIcon = iconRegister.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf(".") + 1));
 	// Returns omnirandom:"blockName"
 		// The file should just be "blockName"
-	}*/
+	}
 	@Override
 	public TileEntity createNewTileEntity(World world) {
 		return null; //Null because it's overriden in the sub-classes

@@ -22,6 +22,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 
+import com.asianjose.omnirandom.ExtendedPlayer;
 import com.asianjose.omnirandom.OmniscientRandomness;
 
 import cpw.mods.fml.relauncher.Side;
@@ -40,6 +41,7 @@ public class ItemCoreOfSteve extends ItemOmni{
 	
 	public ItemCoreOfSteve(int id) {
 		super(id);
+		this.setMaxStackSize(1);
 		this.setUnlocalizedName("coreOfSteve");
 	}
 	
@@ -73,6 +75,8 @@ public class ItemCoreOfSteve extends ItemOmni{
 				list.add(EnumChatFormatting.GREEN + "Mode: " + mode);
 			}
 		}
+		ExtendedPlayer props = ExtendedPlayer.get(player);
+		list.add(EnumChatFormatting.RED + "Time Points: " + props.getCurrentTP());
 	}
 	
 	/** Cycles thru modes when the item is right clicked **/ // TODO: only when shift-clicked?
@@ -138,7 +142,7 @@ public class ItemCoreOfSteve extends ItemOmni{
 						if(rand.nextInt(50) == 1) player.getHeldItem().setItemDamage(player.getHeldItem().getItemDamage() - 1);
 					}
 				}
-			} else if(mode.equals("Farming"))
+			} else if(mode.equals("Farming")) //TODO: Instead of faster growing? How about auto-harvest?
 			{
 				player.addPotionEffect(new PotionEffect(23, 6, 1));
 				if(rand.nextInt(10) == 1)
@@ -164,7 +168,9 @@ public class ItemCoreOfSteve extends ItemOmni{
 		}
 	}
 	
-	/** Adds different modes to creative tab **/
+	/** Adds different modes to creative tab
+	 * Why won't they add???? 4 "Farming" cores show up in the tab
+	 **/
 	public void getSubItems(int par1, CreativeTabs tab, List subItems){
 	        ItemStack core = new ItemStack(this);
 
@@ -176,6 +182,7 @@ public class ItemCoreOfSteve extends ItemOmni{
 	        core.stackTagCompound.setString("Mode", "Mining");
 	        subItems.add(core);
 	        core.stackTagCompound.setString("Mode", "Farming");
+	        subItems.add(core);
 	}
 	
 	/** Misc icon registering stuff. YOU NEED BOTH "getIcon"'s to correctly render in inv & in hand!! **/

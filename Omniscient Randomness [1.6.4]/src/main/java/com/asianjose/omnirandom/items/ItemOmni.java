@@ -30,13 +30,14 @@ public class ItemOmni extends Item{
 		return String.format("item.%s%s", Reference.MOD_ID.toLowerCase() + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
 	}
 	
-	protected String getUnwrappedUnlocalizedName(String unlocalizedName)
+	//TODO: should this method be static?
+	public static String getUnwrappedUnlocalizedName(String unlocalizedName)
 	{
 		return unlocalizedName.substring(unlocalizedName.indexOf(".") + 1);
 	}
 	
 	/** Generic icon registering (using generic naming) **/
-	
+	// NOTE: indPotato does not extend this class, so it has its own icon registering
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister) // 1.7: IconRegister -> IIconRegister
