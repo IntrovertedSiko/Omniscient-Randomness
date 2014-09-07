@@ -10,6 +10,7 @@ import com.asianjose.omnirandom.blocks.tileentity.TileEntityTPShop;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,6 +24,8 @@ public class GuiTPShop extends GuiContainer{
      
      public TileEntityTPShop shop;
      private Minecraft mc;
+     //BUTTON!
+     private GuiButton previous, next;
     
      public GuiTPShop(InventoryPlayer inventoryPlayer, TileEntityTPShop entity) {
              super(new ContainerTPShop(inventoryPlayer, entity));
@@ -50,6 +53,32 @@ public class GuiTPShop extends GuiContainer{
             
              Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
              drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
-            
      }
+     
+     //BUTTONS! for switching pages in TPShop
+    /* @Override
+     public void initGui() {
+    	 buttonList.clear();
+    	 this.buttonList.add(previous = new GuiButton(1, 7, 21, 36, 16, "Previous"));
+    	 this.buttonList.add(next = new GuiButton(2, 43, 21, 36, 16, "Next"));
+     }
+     */
+     /*
+     @Override
+     public void actionPerformed(GuiButton button) {
+    	 switch(button.id) {
+    	 case 1:
+    		 //Go back a page if it's not already at page 1
+    		 if(shop.getShopPage() > 1) {
+    			 shop.updateShopPage(-1);
+    		 }
+    		 break;
+    		 
+    	 case 2:
+    		 //Go forward a page if it's not already at page max
+    		 if(shop.getShopPage() < shop.getShopPageMax()) {
+    			 shop.updateShopPage(1);
+    		 }
+    	 }
+     }*/
 }

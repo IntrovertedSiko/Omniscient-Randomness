@@ -3,6 +3,9 @@ package com.asianjose.omnirandom.handlers;
 import com.asianjose.omnirandom.ExtendedPlayer;
 import com.asianjose.omnirandom.init.ModItems;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -49,6 +52,18 @@ public class MainEventHandler {
 			}
 			ExtendedPlayer.loadProxyData(player);
 			ExtendedPlayer.get(player).sync();
+		}
+	}
+	
+	//Add 1TP for killing a HOSTILE mob
+	@ForgeSubscribe
+	public void killMob(LivingDeathEvent event) {
+		Entity mob = event.entity;
+		
+		if(event.source.getEntity() != null && event.source.getEntity() instanceof EntityPlayer && mob instanceof EntityMob) {
+			EntityPlayer player = (EntityPlayer) event.source.getEntity();
+			ExtendedPlayer props = ExtendedPlayer.get(player);
+			props.addTP(1);
 		}
 	}
 }

@@ -17,8 +17,8 @@ public class ExtendedPlayer implements IExtendedEntityProperties{
 	public static final String EXT_PROP_NAME = "TimePoints";
 	//For Reference
 	private final EntityPlayer player;
-	private int maxTP;
 	private static final int TP_WATCHER = 20;
+	private int maxTP;
 	/*
 	 * etc Variables here
 	 */
@@ -26,9 +26,8 @@ public class ExtendedPlayer implements IExtendedEntityProperties{
 	// Original constructer takes no parameters. coolAlias added EntityPlayer to initialize "player"
 	public ExtendedPlayer(EntityPlayer player) {
 		this.player = player;
-		
-		this.player.getDataWatcher().addObject(TP_WATCHER, 0);	//All players start w/ 0 TP, but can go up to 500 (TODO: see what value is best [config option?])
 		this.maxTP = 500;
+		this.player.getDataWatcher().addObject(TP_WATCHER, 5);	//All players start w/ 0 TP, but can go up to 500 (TODO: see what value is best [config option?])
 	}
 	
 	//Used for convenience. Creates an instance of this ExtendedPlayer for each player
@@ -52,7 +51,7 @@ public class ExtendedPlayer implements IExtendedEntityProperties{
 		NBTTagCompound properties = new NBTTagCompound();
 		
 		properties.setInteger("CurrentTP", this.player.getDataWatcher().getWatchableObjectInt(TP_WATCHER));
-		properties.setInteger("MaxTP", this.maxTP);
+		properties.setInteger("MaxTP", 500);
 		
 		//Add these properties to the player's tag. Use a unique name!
 		//IE if we try to use "Items," it'll conflict w/ vanilla
@@ -64,8 +63,12 @@ public class ExtendedPlayer implements IExtendedEntityProperties{
 	public void loadNBTData(NBTTagCompound compound) {
 		NBTTagCompound properties = (NBTTagCompound) compound.getTag(EXT_PROP_NAME);
 		
+		try {
 		this.player.getDataWatcher().updateObject(TP_WATCHER, properties.getInteger("CurrentTP"));
 		this.maxTP = properties.getInteger("MaxTP");
+		} catch(NullPointerException exception) {
+			System.out.println("[ExtendedPlayer] Could not load data!");
+		}
 	}
 
 	private static String getSaveKey(EntityPlayer player) {
@@ -120,13 +123,14 @@ public class ExtendedPlayer implements IExtendedEntityProperties{
 	 * @param amount
 	 * @return true if amount is successfully taken; false if not enough TP
 	 */
-	public void consumeTP(int amount) {
+	public boolean consumeTP(int amount) {
 		int time = this.player.getDataWatcher().getWatchableObjectInt(TP_WATCHER);
 		if(amount >= time) {
-			return; //If the ideal amount exceeds the current amount of Time Points
+			return false; //If the ideal amount exceeds the current amount of Time Points
 		} 
 		time -= amount; //Takes away amount, since there's enough
 		this.player.getDataWatcher().updateObject(TP_WATCHER, time);
+		return true;
 	}
 	
 	//NOTE: The method below isn't the complete opposite of the above, because 
@@ -137,11 +141,10 @@ public class ExtendedPlayer implements IExtendedEntityProperties{
 	 * @param amount
 	 * @return true if amount is successfully added; false if there's leftovers
 	 */
-	public void addTP(int amount) {
+	public final void addTP(int amount) {
 		int time = this.player.getDataWatcher().getWatchableObjectInt(TP_WATCHER);
-		System.out.println("[ExtendedPlayer] Time: " + time + " | Sum of amount: " + (amount + time));
-		this.player.getDataWatcher().updateObject(TP_WATCHER, ((amount + time) > this.maxTP ? this.maxTP : (amount + time)));
-		System.out.println("[ExtendedPlayer] CurrentTP: " + this.player.getDataWatcher().getWatchableObjectInt(TP_WATCHER));
+		amount = (amount + time) > this.maxTP ? this.maxTP : amount + time;
+		this.player.getDataWatcher().updateObject(TP_WATCHER, (amount));
 		//TODO: Get leftovers and do something with it?
 	}
 	

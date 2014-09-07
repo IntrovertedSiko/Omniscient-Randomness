@@ -47,7 +47,7 @@ public class ContainerTPShop extends Container {
              {
                      ItemStack itemstack1 = slot.getStack();
                      itemstack = itemstack1.copy();
-                    
+                    /*
                      if(clickedSlot <= 9)
                      {
                              if(!this.mergeItemStack(itemstack1, 10, 45, true))

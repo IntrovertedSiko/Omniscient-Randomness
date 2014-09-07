@@ -75,7 +75,7 @@ public class GuiTimePointBar extends Gui{
 		
 		// TODO: Change "48" according to how tall the texture is
 		int timePointsHeight = (int)(((float) props.getCurrentTP() / props.getMaxTP()) * 48);
-		drawTexturedModalRect(xPos + 1, yPos + 1, 9, 48 - timePointsHeight, 6, 48);
+		drawTexturedModalRect(xPos + 1, yPos + 1, 8, timePointsHeight - 48, 6, 48);
 		
 		// NOTE: be sure to reset the openGL settings after you're done or your character model will be messed up
 		GL11.glDisable(GL11.GL_BLEND);
