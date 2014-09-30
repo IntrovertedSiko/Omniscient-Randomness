@@ -1,7 +1,7 @@
 package com.asianjose.omnirandom.items;
 
 import com.asianjose.omnirandom.OmniscientRandomness;
-import com.asianjose.omnirandom.Reference;
+import com.asianjose.omnirandom.reference.ModNames;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -20,14 +20,14 @@ public class ItemOmni extends Item{
 	@Override
 	public String getUnlocalizedName()
 	{
-		return String.format("item.%s%s", Reference.MOD_ID.toLowerCase() + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+		return String.format("item.%s%s", ModNames.MOD_ID.toLowerCase() + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
 	// Returns  item.omnirandom:"insertItem".name
 	}
 	
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack)
 	{
-		return String.format("item.%s%s", Reference.MOD_ID.toLowerCase() + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+		return String.format("item.%s%s", ModNames.MOD_ID.toLowerCase() + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
 	}
 	
 	//TODO: should this method be static?

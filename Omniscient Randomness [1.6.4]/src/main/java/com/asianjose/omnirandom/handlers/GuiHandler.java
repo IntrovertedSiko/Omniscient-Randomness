@@ -13,9 +13,15 @@ import com.asianjose.omnirandom.blocks.tileentity.TileEntityFridge;
 import com.asianjose.omnirandom.blocks.tileentity.TileEntityIndComposter;
 import com.asianjose.omnirandom.blocks.tileentity.TileEntityTPShop;
 import com.asianjose.omnirandom.blocks.tileentity.TileEntityXPD;
+import com.asianjose.omnirandom.items.ContainerPocketFurnace;
+import com.asianjose.omnirandom.items.GuiPocketFurnace;
+import com.asianjose.omnirandom.items.PocketFurnaceInventory;
 
+import net.minecraft.client.gui.inventory.GuiFurnace;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ContainerFurnace;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IGuiHandler;
 
@@ -45,6 +51,10 @@ public class GuiHandler implements IGuiHandler {
                  }
          }
         
+         if(ID == OmniscientRandomness.guiIdPocketFurnace) {
+        	 return new ContainerPocketFurnace(player, player.inventory, new PocketFurnaceInventory(player.getHeldItem()));
+      	 }
+         
          return null;
  }
 
@@ -70,6 +80,10 @@ public class GuiHandler implements IGuiHandler {
                      	 			return new GuiTPShop(player.inventory, (TileEntityTPShop) entity);
                      	 	}
                  }
+         }
+         
+         if(ID == OmniscientRandomness.guiIdPocketFurnace) {
+        	 return new GuiPocketFurnace((ContainerPocketFurnace) new ContainerPocketFurnace(player, player.inventory, new PocketFurnaceInventory(player.getHeldItem())));
          }
          return null;
  }

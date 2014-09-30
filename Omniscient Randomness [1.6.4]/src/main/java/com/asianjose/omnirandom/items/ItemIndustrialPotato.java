@@ -1,7 +1,7 @@
 package com.asianjose.omnirandom.items;
 
 import com.asianjose.omnirandom.OmniscientRandomness;
-import com.asianjose.omnirandom.Reference;
+import com.asianjose.omnirandom.reference.ModNames;
 
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,12 +28,12 @@ public class ItemIndustrialPotato extends ItemFood{
 	
 	@Override
 	public String getUnlocalizedName() {
-		return String.format("item.%s%s", Reference.MOD_ID.toLowerCase() + ":", ItemOmni.getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+		return String.format("item.%s%s", ModNames.MOD_ID.toLowerCase() + ":", ItemOmni.getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
 	}
 	
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack) {
-		return String.format("item.%s%s", Reference.MOD_ID.toLowerCase() + ":", ItemOmni.getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+		return String.format("item.%s%s", ModNames.MOD_ID.toLowerCase() + ":", ItemOmni.getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
 	}
 	
 	@Override

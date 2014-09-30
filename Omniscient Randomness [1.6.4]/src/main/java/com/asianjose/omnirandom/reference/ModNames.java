@@ -1,6 +1,6 @@
-package com.asianjose.omnirandom;
+package com.asianjose.omnirandom.reference;
 
-public class Reference {
+public class ModNames {
 
 	public static final String MOD_ID = "omnirandom";
     public static final String MOD_NAME = "Omniscient Randomness";

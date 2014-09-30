@@ -7,7 +7,6 @@ import com.asianjose.omnirandom.blocks.tileentity.TileEntityFridge;
 import com.asianjose.omnirandom.blocks.tileentity.TileEntityIndComposter;
 import com.asianjose.omnirandom.blocks.tileentity.TileEntityXPD;
 import com.asianjose.omnirandom.client.GuiTimePointBar;
-import com.asianjose.omnirandom.events.BreakBlockEvent;
 import com.asianjose.omnirandom.handlers.ConfigurationHandler;
 import com.asianjose.omnirandom.handlers.GuiHandler;
 import com.asianjose.omnirandom.handlers.MainEventHandler;
@@ -16,12 +15,13 @@ import com.asianjose.omnirandom.init.ModBlocks;
 import com.asianjose.omnirandom.init.ModItems;
 import com.asianjose.omnirandom.proxy.ClientProxy;
 import com.asianjose.omnirandom.proxy.CommonProxy;
-import com.asianjose.omnirandom.Reference;
+import com.asianjose.omnirandom.reference.ModNames;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
@@ -41,14 +41,14 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION)
+@Mod(modid = ModNames.MOD_ID, name = ModNames.MOD_NAME, version = ModNames.VERSION)
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"timeChannel"}, packetHandler = PacketHandler.class)
 public class OmniscientRandomness {
 	//////////////////////////////////////////// Randomness!
 	@Instance("omnirandom")
 	public static OmniscientRandomness instance;
 	
-	@SidedProxy(clientSide=Reference.CLIENT_PROXY_CLASS, serverSide=Reference.SERVER_PROXY_CLASS)
+	@SidedProxy(clientSide=ModNames.CLIENT_PROXY_CLASS, serverSide=ModNames.SERVER_PROXY_CLASS)
 	public static CommonProxy proxy;
 	//////////////////////////////////////////// Initialization!
 	private GuiHandler guiHandler = new GuiHandler();	
@@ -56,6 +56,9 @@ public class OmniscientRandomness {
 	public static final int guiIdXPD = 1;
 	public static final int guiIdIndComposter = 2;
 	public static final int guiIdTPShop = 3;
+	public static final int guiIdPocketFurnace = 4;
+	public static final int guiIdEnchanter = 5;
+	
 	/*
 	public static Block fridge;
 	public static Block xpDecomposer;
@@ -67,6 +70,10 @@ public class OmniscientRandomness {
 	*/
 	public static int itemIdStart; //Starting item ID. Each consecutive itemid is 1 higher
 	public static int blockIdStart; //Starting blockID. Each consecutive block is 1 higher than prev
+	
+	/* New tool material
+	EnumHelper.addToolMaterial("name", harvestLevel, durability, eficiencyOnProperMaterial, dmgVsEntity, enchantability);
+	*/
 	
 	/** Creative Tab = "Omniscient Randomness" **/
 	public static final CreativeTabs OMNI_TAB = new CreativeTabs(CreativeTabs.getNextID(), "Omniscient Randomness")
@@ -100,7 +107,6 @@ public class OmniscientRandomness {
 	@EventHandler
 	public void init(FMLInitializationEvent event){
 		
-		MinecraftForge.EVENT_BUS.register(new BreakBlockEvent());
 		MinecraftForge.EVENT_BUS.register(new MainEventHandler());
 		
 		ModItems.init(); //Initialize all my items

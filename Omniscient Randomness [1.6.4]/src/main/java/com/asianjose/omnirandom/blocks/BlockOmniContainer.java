@@ -3,8 +3,8 @@ package com.asianjose.omnirandom.blocks;
 import java.util.Random;
 
 import com.asianjose.omnirandom.OmniscientRandomness;
-import com.asianjose.omnirandom.Reference;
 import com.asianjose.omnirandom.init.ModBlocks;
+import com.asianjose.omnirandom.reference.ModNames;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -68,12 +68,12 @@ public class BlockOmniContainer extends BlockContainer {
 	@Override
 	public String getUnlocalizedName()
 	{
-		return String.format("tile.%s%s", Reference.MOD_ID.toLowerCase() + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+		return String.format("tile.%s%s", ModNames.MOD_ID.toLowerCase() + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
 	}
 	
 	public String getUnlocalizedName(ItemStack itemstack)
 	{
-		return String.format("tile.%s%s", Reference.MOD_ID.toLowerCase() + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+		return String.format("tile.%s%s", ModNames.MOD_ID.toLowerCase() + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
 	}
 	
 	protected String getUnwrappedUnlocalizedName(String unlocalizedName)

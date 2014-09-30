@@ -48,7 +48,7 @@ public class TileEntityTPShop extends TileEntityOmni implements ISidedInventory{
 	public void setGuiDisplayName(String displayName){
 		this.localizedName = displayName;
 	}
-	
+	/* Moved to SlotShop
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
 		if(inventory[slot] != null) {
@@ -57,14 +57,23 @@ public class TileEntityTPShop extends TileEntityOmni implements ISidedInventory{
 			if(player != null) {
 				if(props.consumeTP(getTPCost(itemstack.getItem()))) return itemstack;
 			}
-			/*if(inventory[slot].stackSize <= amount) {
+			if(inventory[slot].stackSize <= amount) {
 				itemstack = inventory[slot];
 				System.out.println("[TileEntityTPShop] Player: " + player + " has taken something. Deduct points! He has: " + props.getCurrentTP());
 				return itemstack;
 			} else {
 				itemstack = inventory[slot].splitStack(amount);
 				return itemstack;
-			}*/
+			}
+		}
+		return null;
+	}
+	*/
+	
+	@Override
+	public ItemStack decrStackSize(int slot, int amount) {
+		if(inventory[slot] != null) {
+			return inventory[slot];
 		}
 		return null;
 	}
@@ -114,7 +123,7 @@ public class TileEntityTPShop extends TileEntityOmni implements ISidedInventory{
 	}
 	
 	//Returns the amount of TP that a given item costs
-	private int getTPCost(Item item) {
+	public int getTPCost(Item item) {
 		if(item != null) {
 			if(item == Item.redstone) return 2;
 			if(item == Item.glowstone) return 5;

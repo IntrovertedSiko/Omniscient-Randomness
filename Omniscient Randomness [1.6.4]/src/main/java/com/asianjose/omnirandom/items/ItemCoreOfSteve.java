@@ -15,6 +15,7 @@ import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumChatFormatting;
@@ -79,9 +80,19 @@ public class ItemCoreOfSteve extends ItemOmni{
 		list.add(EnumChatFormatting.RED + "Time Points: " + props.getCurrentTP());
 	}
 	
+	@Override
+	public int getMaxItemUseDuration(ItemStack stack) {
+		return 1;
+	}
+	
 	/** Cycles thru modes when the item is right clicked **/ // TODO: only when shift-clicked?
 	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player)
 	{
+		if(player.isSneaking()) {
+			player.openGui(OmniscientRandomness.instance, OmniscientRandomness.guiIdPocketFurnace, world, (int)player.posX, (int)player.posY, (int)player.posZ);
+			System.out.println("Player opened pocketFurnace");
+		}
+		
 		if(itemStack.stackTagCompound != null) //Saftey precautions?
 		{
 			String mode = itemStack.stackTagCompound.getString("Mode");
@@ -100,15 +111,17 @@ public class ItemCoreOfSteve extends ItemOmni{
 			{
 				itemStack.stackTagCompound.setString("Mode", "Neutral");
 			}
-			world.playSoundAtEntity(player, "random.orb", 1F, 1F);
 		}
 		
 		return itemStack;
 	}
 	
-	/** Updates the item every tick it's in the inventory **/
-	public void onUpdate(ItemStack itemStack, World world, Entity entity, int par4, boolean par5)
+	/** Updates the item every tick it's in the inventory 
+	*
+	*/
+	public void onUpdate(ItemStack itemStack, World world, Entity entity, int par4, boolean isInHand)
 	{
+		
 		if(entity instanceof EntityPlayer && !world.isRemote)
 		{
 			if(itemStack.stackTagCompound == null) //If it doesn't have nbt (IE out of creative tab)
@@ -176,13 +189,14 @@ public class ItemCoreOfSteve extends ItemOmni{
 
 	        core.stackTagCompound = new NBTTagCompound();
 	        core.stackTagCompound.setString("Mode", "Neutral");
-	        subItems.add(core);
+	        //It doesn't work!
+	       /* subItems.add(core);
 	        core.stackTagCompound.setString("Mode", "Adventuring");
 	        subItems.add(core);
 	        core.stackTagCompound.setString("Mode", "Mining");
 	        subItems.add(core);
 	        core.stackTagCompound.setString("Mode", "Farming");
-	        subItems.add(core);
+	        subItems.add(core);*/
 	}
 	
 	/** Misc icon registering stuff. YOU NEED BOTH "getIcon"'s to correctly render in inv & in hand!! **/

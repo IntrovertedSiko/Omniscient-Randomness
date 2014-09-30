@@ -5,24 +5,42 @@
  R4wk, ZeuX, IngisKahn      
  MCP Data version : unknown
 ****************************
-:extractUserDev
-:getAssetsIndex
-:getAssets
-:copyAssets
 :downloadClient SKIPPED
 :downloadServer SKIPPED
+:extractUserDev
 :mergeJars SKIPPED
 :applyBinPatches SKIPPED
 :downloadMcpTools UP-TO-DATE
-:genSrgs UP-TO-DATE
-:deobfBinJar UP-TO-DATE
-:extractNatives
-:setupDevWorkspace
-:eclipseClasspath
-:eclipseJdt
-:eclipseProject
-:eclipse
+:genSrgs
+:deobfBinJar
+Applying SpecialSource...
+Applying Exceptor...
+Injecting source info...
+:compileApiJava UP-TO-DATE
+:processApiResources UP-TO-DATE
+:apiClasses UP-TO-DATE
+:sourceMainJava
+:compileJava
+Download http://files.minecraftforge.net/maven/org/scala-lang/scala-library/2.10.2/scala-library-2.10.2.pom
+Download http://files.minecraftforge.net/maven/org/scala-lang/scala-compiler/2.10.2/scala-compiler-2.10.2.pom
+Download http://files.minecraftforge.net/maven/org/scala-lang/scala-library/2.10.2/scala-library-2.10.2.jar
+Download http://files.minecraftforge.net/maven/org/scala-lang/scala-compiler/2.10.2/scala-compiler-2.10.2.jar
+warning: [options] bootstrap class path not set in conjunction with -source 1.6
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+1 warning
+:processResources
+:classes
+:jar
+:reobf
+:assemble
+:compileTestJava UP-TO-DATE
+:processTestResources UP-TO-DATE
+:testClasses UP-TO-DATE
+:test UP-TO-DATE
+:check UP-TO-DATE
+:build
 
 BUILD SUCCESSFUL
 
-Total time: 40.936 secs
+Total time: 1 mins 32.117 secs

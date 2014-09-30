@@ -1,8 +1,13 @@
 package com.asianjose.omnirandom.handlers;
 
+import java.util.Random;
+
 import com.asianjose.omnirandom.ExtendedPlayer;
 import com.asianjose.omnirandom.init.ModItems;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockOre;
+import net.minecraft.block.BlockRedstoneOre;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntityMob;
@@ -12,9 +17,12 @@ import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.world.BlockEvent;
 
 public class MainEventHandler {
 
+	private Random rand = new Random();
+	
 	//TODO: Should I centralize all the events?
 	
 	//"Registers"(?) the IExtendedEntityProperties
@@ -64,6 +72,28 @@ public class MainEventHandler {
 			EntityPlayer player = (EntityPlayer) event.source.getEntity();
 			ExtendedPlayer props = ExtendedPlayer.get(player);
 			props.addTP(1);
+		}
+	}
+	
+	/** Current Uses: drops multiple items when broken with a "seeking" pickaxe & adds 1TP
+	 *  NOTE: If you're trying to make an event... make sure it's registered
+	 **/
+	@ForgeSubscribe
+	public void BreakEvent(BlockEvent.HarvestDropsEvent event) {
+		EntityPlayer player = event.harvester;
+		if(player != null) {
+			Block brokenBlock = event.block;
+			int brokenBlockMeta = event.blockMetadata;
+			ItemStack heldItem = event.harvester.getCurrentEquippedItem();
+			if((brokenBlock instanceof BlockOre || brokenBlock instanceof BlockRedstoneOre) && !event.world.isRemote && heldItem != null) {
+				if(brokenBlock != Block.oreIron && brokenBlock != Block.oreGold) {
+					if(heldItem.stackTagCompound.getBoolean("Seeking") == true) {
+						ExtendedPlayer props = ExtendedPlayer.get(player);
+						props.addTP(1);
+						event.drops.add(new ItemStack(brokenBlock.idDropped(brokenBlockMeta, rand, 0), rand.nextInt(5), 4));
+					}
+				}
+			}
 		}
 	}
 }
